@@ -66,13 +66,14 @@ async function fetchTextWithPowerShell(url: string) {
   return decodeBuffer(buffer);
 }
 
-async function withRetry<T>(task: () => Promise<T>, attempts = 2): Promise<T> {
+async function withRetry<T>(task: () => Promise<T>, attempts = 3): Promise<T> {
   let lastError: unknown;
   for (let index = 0; index < attempts; index += 1) {
     try {
       return await task();
     } catch (error) {
       lastError = error;
+      if (index < attempts - 1) await sleep(500 * (index + 1));
     }
   }
   throw lastError instanceof Error ? lastError : new Error(String(lastError));
@@ -87,4 +88,8 @@ function parseJsonText(text: string) {
 function decodeBuffer(buffer: Buffer) {
   const utf8 = buffer.toString('utf8');
   return utf8.includes('\uFFFD') ? new TextDecoder('gb18030').decode(buffer) : utf8;
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
