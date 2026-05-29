@@ -1,0 +1,16 @@
+.DS_Store
+node_modules
+/.svelte-kit
+/build
+/.vite
+/.vercel
+/coverage
+/.env
+/.env.*
+!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logger.log
+*.log
